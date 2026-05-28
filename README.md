@@ -10,7 +10,7 @@ A simple GitOps-based Kubernetes deployment demo using ArgoCD and GitLab.
 
 ---
 
-# Project Overview
+## Project Overview
 
 This project demonstrates how to deploy and manage applications in Kubernetes using GitOps principles with ArgoCD.
 
@@ -18,7 +18,7 @@ The Kubernetes manifests are stored in a GitLab repository, and ArgoCD continuou
 
 ---
 
-# Features
+## Features
 
 - GitOps workflow using ArgoCD
 - Kubernetes Deployment and Service manifests
@@ -30,7 +30,7 @@ The Kubernetes manifests are stored in a GitLab repository, and ArgoCD continuou
 
 ---
 
-# Tech Stack
+## Tech Stack
 
 - Kubernetes
 - ArgoCD
@@ -41,13 +41,30 @@ The Kubernetes manifests are stored in a GitLab repository, and ArgoCD continuou
 
 ---
 
-# Repository Structure
+## Repository Structure
 
 ```bash
 argocd-app/
 │
-├── application.yaml
+├── architecture
+│    └── architecture-diagram.png
+│
+├── screenshots
+│    ├── argocd-ui.png
+│    ├── app-status.png
+│    └── pod-status.png
+│
+├── docs/
+│    ├── architecture.md
+│    ├── argocd-setup.md
+│    ├── gitlab-integration.md
+│    ├── deployment-guide.md
+│    ├── troubleshooting.md
+│    └── gitops-workflow.md
+│
 ├── README.md
+│
+├── application.yaml
 │
 └── dev/
     ├── deployment.yaml
@@ -56,129 +73,12 @@ argocd-app/
 
 ---
 
-# Architecture Diagram
-
-```text
-                +----------------------+
-                |      GitLab Repo     |
-                |  argocd-app.git      |
-                +----------+-----------+
-                           |
-                           | GitOps Sync
-                           |
-                +----------v-----------+
-                |       ArgoCD         |
-                |  Watches Git Repo    |
-                +----------+-----------+
-                           |
-                           | Deploys Resources
-                           |
-                +----------v-----------+
-                |    Kubernetes        |
-                |      Cluster         |
-                +----------+-----------+
-                           |
-          +----------------+----------------+
-          |                                 |
-+---------v----------+          +-----------v----------+
-|   Deployment       |          |      Service         |
-| myapp-deployment   |          |    myapp-service     |
-+--------------------+          +----------------------+
-```
+## Architecture Diagram
+![Architecture_diagram](architecture/architecture-diagram.png)
 
 ---
 
-# Kubernetes Application
-
-The application is deployed using an ArgoCD Application resource.
-
-## application.yaml
-
-```yaml
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-
-metadata:
-  name: myapp-argo-application
-  namespace: argocd
-
-spec:
-  project: default
-
-  source:
-    repoURL: https://gitlab.com/josephmj0303/argocd-app.git
-    targetRevision: HEAD
-    path: dev
-
-  destination:
-    server: https://kubernetes.default.svc
-    namespace: myapp
-
-  syncPolicy:
-    syncOptions:
-      - CreateNamespace=true
-
-    automated:
-      selfHeal: true
-      prune: true
-```
-
----
-
-# Deployment Manifest
-
-```yaml
-apiVersion: apps/v1
-kind: Deployment
-
-metadata:
-  name: myapp-deployment
-
-spec:
-  replicas: 2
-
-  selector:
-    matchLabels:
-      app: myapp
-
-  template:
-    metadata:
-      labels:
-        app: myapp
-
-    spec:
-      containers:
-        - name: myapp
-          image: nanajanashia/argocd-app:1.2
-
-          ports:
-            - containerPort: 8080
-```
-
----
-
-# Service Manifest
-
-```yaml
-apiVersion: v1
-kind: Service
-
-metadata:
-  name: myapp-service
-
-spec:
-  selector:
-    app: myapp
-
-  ports:
-    - protocol: TCP
-      port: 8080
-      targetPort: 8080
-```
-
----
-
-# Prerequisites
+## Prerequisites
 
 Before starting, ensure the following are installed:
 
@@ -191,21 +91,21 @@ Before starting, ensure the following are installed:
 
 ---
 
-# Installing ArgoCD
+## Installing ArgoCD
 
-Create namespace:
+#### Create namespace:
 
 ```bash
 kubectl create namespace argocd
 ```
 
-Install ArgoCD:
+#### Install ArgoCD:
 
 ```bash
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 ```
 
-Verify installation:
+#### Verify installation:
 
 ```bash
 kubectl get pods -n argocd
@@ -213,7 +113,7 @@ kubectl get pods -n argocd
 
 ---
 
-# Accessing ArgoCD UI
+## Accessing ArgoCD UI
 
 Since this project uses Vagrant VMs, expose the ArgoCD server using:
 
@@ -235,7 +135,7 @@ https://192.168.56.11:8080
 
 ---
 
-# Getting ArgoCD Admin Password
+## Getting ArgoCD Admin Password
 
 ```bash
 kubectl get secret argocd-initial-admin-secret -n argocd \
@@ -250,11 +150,11 @@ admin
 
 ---
 
-# Connecting GitLab Repository to ArgoCD
+## Connecting GitLab Repository to ArgoCD
 
 Since the repository is private, add GitLab credentials to ArgoCD.
 
-## Create GitLab Personal Access Token
+### Create GitLab Personal Access Token
 
 Required permission:
 
@@ -264,7 +164,7 @@ read_repository
 
 ---
 
-## Add Repository Using CLI
+### Add Repository Using CLI
 
 ```bash
 argocd repo add https://gitlab.com/josephmj0303/argocd-app.git \
@@ -274,7 +174,7 @@ argocd repo add https://gitlab.com/josephmj0303/argocd-app.git \
 
 ---
 
-## Add Repository Using ArgoCD UI
+### Add Repository Using ArgoCD UI
 
 - Settings
 - Repositories
@@ -291,7 +191,7 @@ Use:
 
 ---
 
-# Deploying the Application
+## Deploying the Application
 
 Apply the ArgoCD application:
 
@@ -319,23 +219,7 @@ kubectl get svc -n myapp
 
 ---
 
-# Accessing the Application
-
-Port forward the service:
-
-```bash
-kubectl port-forward svc/myapp-service 8080:8080 -n myapp
-```
-
-Access:
-
-```text
-http://localhost:8080
-```
-
----
-
-# GitOps Workflow
+## GitOps Workflow
 
 1. Developer pushes code/manifests to GitLab
 2. ArgoCD detects repository changes
@@ -345,7 +229,7 @@ http://localhost:8080
 
 ---
 
-# ArgoCD Sync Features
+## ArgoCD Sync Features
 
 This project uses:
 
@@ -355,37 +239,37 @@ automated:
   prune: true
 ```
 
-## selfHeal
+### selfHeal
 
 Automatically restores deleted or modified Kubernetes resources.
 
-## prune
+### prune
 
 Removes Kubernetes resources deleted from Git.
 
 ---
 
-# Useful Commands
+## Useful Commands
 
-## Check application status
+### Check application status
 
 ```bash
 argocd app get myapp-argo-application
 ```
 
-## Force sync
+### Force sync
 
 ```bash
 argocd app sync myapp-argo-application
 ```
 
-## Refresh application
+### Refresh application
 
 ```bash
 argocd app refresh myapp-argo-application --hard
 ```
 
-## View cluster resources
+### View cluster resources
 
 ```bash
 kubectl get all -n myapp
@@ -393,7 +277,20 @@ kubectl get all -n myapp
 
 ---
 
-# Future Improvements
+## Screenshots
+
+#### Argocd Console
+![argocd_console](screenshots/argocd-ui.png)
+
+#### Application Status
+![app_status](screenshots/app-status.png)
+
+#### Pods Running
+![pod_status](screeenshots/pod-status.png)
+
+---
+
+## Future Improvements
 
 - Add Ingress Controller
 - Add TLS Certificates
@@ -408,7 +305,7 @@ kubectl get all -n myapp
 
 ---
 
-# Learning Objectives
+## Learning Objectives
 
 This project helps understand:
 
@@ -421,20 +318,17 @@ This project helps understand:
 
 ---
 
-# Author
+## License
+
+This project is licensed under the MIT License.
+
+---
+
+## Author
 
 Joseph M J
 
 DevOps Engineer
 
-GitLab:
-https://gitlab.com/josephmj0303
 
-LinkedIn:
-https://www.linkedin.com/in/josephmj-devops/
 
----
-
-# License
-
-This project is licensed under the MIT License.
