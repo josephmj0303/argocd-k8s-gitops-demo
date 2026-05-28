@@ -10,7 +10,7 @@ A simple GitOps-based Kubernetes deployment demo using ArgoCD and GitLab.
 
 ---
 
-## Project Overview
+## 📌 Project Overview
 
 This project demonstrates how to deploy and manage applications in Kubernetes using GitOps principles with ArgoCD.
 
@@ -18,7 +18,7 @@ The Kubernetes manifests are stored in a GitLab repository, and ArgoCD continuou
 
 ---
 
-## Features
+## 🧠 Features
 
 - GitOps workflow using ArgoCD
 - Kubernetes Deployment and Service manifests
@@ -30,7 +30,7 @@ The Kubernetes manifests are stored in a GitLab repository, and ArgoCD continuou
 
 ---
 
-## Tech Stack
+## ⚙️ Tech Stack
 
 - Kubernetes
 - ArgoCD
@@ -41,7 +41,7 @@ The Kubernetes manifests are stored in a GitLab repository, and ArgoCD continuou
 
 ---
 
-## Repository Structure
+## 📂 Repository Structure
 
 ```bash
 argocd-app/
@@ -73,12 +73,12 @@ argocd-app/
 
 ---
 
-## Architecture Diagram
+## 🚀 Architecture 
 ![Architecture_diagram](architecture/architecture-diagram.png)
 
 ---
 
-## Prerequisites
+## 📊 Prerequisites
 
 Before starting, ensure the following are installed:
 
@@ -91,7 +91,7 @@ Before starting, ensure the following are installed:
 
 ---
 
-## Installing ArgoCD
+## 🧪 Installing ArgoCD
 
 #### Create namespace:
 
@@ -113,7 +113,7 @@ kubectl get pods -n argocd
 
 ---
 
-## Accessing ArgoCD UI
+## 📦 Accessing ArgoCD UI
 
 Since this project uses Vagrant VMs, expose the ArgoCD server using:
 
@@ -135,7 +135,7 @@ https://192.168.56.11:8080
 
 ---
 
-## Getting ArgoCD Admin Password
+## 🖥️ Getting ArgoCD Admin Password
 
 ```bash
 kubectl get secret argocd-initial-admin-secret -n argocd \
@@ -150,7 +150,7 @@ admin
 
 ---
 
-## Connecting GitLab Repository to ArgoCD
+## 🔄 Connecting GitLab Repository to ArgoCD
 
 Since the repository is private, add GitLab credentials to ArgoCD.
 
@@ -191,7 +191,7 @@ Use:
 
 ---
 
-## Deploying the Application
+## 🔄 Deploying the Application
 
 Apply the ArgoCD application:
 
@@ -219,7 +219,7 @@ kubectl get svc -n myapp
 
 ---
 
-## GitOps Workflow
+## 🧪 GitOps Workflow
 
 1. Developer pushes code/manifests to GitLab
 2. ArgoCD detects repository changes
@@ -229,7 +229,7 @@ kubectl get svc -n myapp
 
 ---
 
-## ArgoCD Sync Features
+## 🔄 ArgoCD Sync Features
 
 This project uses:
 
@@ -249,7 +249,7 @@ Removes Kubernetes resources deleted from Git.
 
 ---
 
-## Useful Commands
+## 🎯 Useful Commands
 
 ### Check application status
 
@@ -277,7 +277,7 @@ kubectl get all -n myapp
 
 ---
 
-## Screenshots
+## 📸 Screenshots
 
 #### Argocd Console
 ![argocd_console](screenshots/argocd-ui.png)
@@ -290,7 +290,7 @@ kubectl get all -n myapp
 
 ---
 
-## Future Improvements
+## 📈 Future Improvements
 
 - Add Ingress Controller
 - Add TLS Certificates
@@ -305,7 +305,7 @@ kubectl get all -n myapp
 
 ---
 
-## Learning Objectives
+## 🧠 Learning Objectives
 
 This project helps understand:
 
@@ -318,13 +318,13 @@ This project helps understand:
 
 ---
 
-## License
+## 🏁 License
 
 This project is licensed under the MIT License.
 
 ---
 
-## Author
+## 👨‍💻 Author
 
 Joseph M J
 
