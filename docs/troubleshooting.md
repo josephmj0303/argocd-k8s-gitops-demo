@@ -1,19 +1,36 @@
-# Deployment Guide
+# Troubleshooting
 
-## Deploy Application
+## ArgoCD UI Not Accessible
+
+Use:
 
 ```bash
-kubectl apply -f application.yaml
+kubectl port-forward --address 0.0.0.0 \
+svc/argocd-server 8080:443 -n argocd
 ```
 
-## Verify Application
+---
+
+## GitLab Authentication Error
+
+Ensure:
+
+- Personal Access Token is valid
+- Token has read_repository permission
+- Correct GitLab username is used
+
+---
+
+## Pods Not Running
+
+Check:
 
 ```bash
-kubectl get applications -n argocd
+kubectl describe pod <pod-name> -n myapp
 ```
 
-## Verify Pods
+View logs:
 
 ```bash
-kubectl get pods -n myapp
+kubectl logs <pod-name> -n myapp
 ```
