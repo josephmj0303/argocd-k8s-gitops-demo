@@ -286,7 +286,7 @@ kubectl get all -n myapp
 ![app_status](screenshots/app-status.png)
 
 #### Pods Running
-![pod_status](screeenshots/pod-status.png)
+![pod_status](screenshots/pod-status.png)
 
 ---
 
